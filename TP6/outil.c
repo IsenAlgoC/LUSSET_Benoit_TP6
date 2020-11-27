@@ -150,7 +150,7 @@ bool est_sup(Enregistrement enr1, Enregistrement enr2)
 		if (tolower(enr2.prenom[i]) < tolower(enr1.prenom[i])) return (true);   //on refait pareil avec les prénoms au cas où les noms sont les mêmes
 		if (tolower(enr2.prenom[i]) > tolower(enr1.prenom[i])) return (false);
 	}
-	return(false);
+	return(false);																//dans le cas où les 2 sont les mêmes, on renvoie false par défaut
 
 }
  
