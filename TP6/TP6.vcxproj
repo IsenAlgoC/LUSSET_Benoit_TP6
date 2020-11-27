@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{438b5f39-3b8a-4b5d-a5ba-6225fd829e2c}</ProjectGuid>
-    <RootNamespace>TP61</RootNamespace>
+    <ProjectGuid>{ccb7aa5b-9e21-4650-ae51-e499d5e44440}</ProjectGuid>
+    <RootNamespace>TP6</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,7 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TP6_ex1.c" />
+    <ClCompile Include="liste.c" />
+    <ClCompile Include="outil.c" />
+    <ClCompile Include="rep.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="liste.h" />
+    <ClInclude Include="personne.h" />
+    <ClInclude Include="rep.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="rep.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
