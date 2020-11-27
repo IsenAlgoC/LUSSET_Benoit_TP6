@@ -93,6 +93,3 @@ bool traiter_recherche(Repertoire *rep, int pos); // menu qui propose de supprim
 
 int saisir_chemin(char *message, char *buffer); // demande de saisie au clavier d'un chemin pour un fichier de sauvegarde, fait appel à saisie_chaine()
 int sauvegarder(Repertoire *rep, char nom_fichier[]); // sauvegarde tout le répertoire en mémoire vers un fichier en remplaçant l'ancien fichier
-
-
-

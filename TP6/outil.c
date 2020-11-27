@@ -75,15 +75,14 @@ int ajouter_un_contact_dans_rep(Repertoire *rep, Enregistrement enr)
 void supprimer_un_contact_dans_rep(Repertoire *rep, int indice) {
 
 	// compléter code ici pour tableau
-	if (rep->nb_elts >= 1)		/* s'il y a au moins un element ds le tableau */
-	{						/* et que l'indice pointe a l'interieur */
+	if (rep->nb_elts >= 1)		// s'il y a au moins un element ds le tableau 
+	{						// et que l'indice pointe a l'interieur 
 		
+		for (int i = indice; i < rep->nb_elts; i++) {
+			*(rep->tab + i) = *(rep->tab + i + 1);
+		}
 
-
-
-
-
-		rep->nb_elts -= 1;		/* ds ts les cas, il y a un element en moins */
+		rep->nb_elts -= 1;		// dans tous les cas, il y a un element en moins 
 		modif = true;
 	}
 
@@ -119,7 +118,7 @@ void supprimer_un_contact_dans_rep(Repertoire *rep, int indice) {
 void affichage_enreg(Enregistrement enr)
 {
 	// code à compléter ici
-
+	printf("%s, %s                      %s\n", enr.nom, enr.prenom, enr.tel);
 
 } /* fin affichage_enreg */
   /**********************************************************************/
@@ -131,7 +130,7 @@ void affichage_enreg_frmt(Enregistrement enr)
 {
 	// code à compléter ici
 	// comme fonction affichage_enreg, mais avec présentation alignées des infos
-	
+	printf("|%-20s  |%-20s  |%-30s\n", enr.nom, enr.prenom, enr.tel);
 
 } /* fin affichage_enreg */
 
@@ -143,8 +142,14 @@ void affichage_enreg_frmt(Enregistrement enr)
 bool est_sup(Enregistrement enr1, Enregistrement enr2)
 {
 	// code à compléter ici
-	
-
+	for (int i = 0; i < MAX_NOM; i++) {
+		if (tolower(enr2.nom[i]) < tolower(enr1.nom[i])) return (true);   //on vérifie si la 1ere lettre du deuxième contact est plus bas que l'autre, si oui c'est bon
+		if (tolower(enr2.nom[i]) > tolower(enr1.nom[i])) return (false);  //sinon on vérifie si elle est plus haut, si c'est le cas on return false
+	}                                                                      //si les lettres sont les mêmes on refait un test sur la lettre suivante jusqu'à une différence
+	for (int i = 0; i < MAX_NOM; i++) {
+		if (tolower(enr2.prenom[i]) < tolower(enr1.prenom[i])) return (true);   //on refait pareil avec les prénoms au cas où les noms sont les mêmes
+		if (tolower(enr2.prenom[i]) > tolower(enr1.prenom[i])) return (false);
+	}
 	return(false);
 
 }
@@ -195,6 +200,21 @@ int rechercher_nom(Repertoire *rep, char nom[], int ind)
 
 #ifdef IMPL_TAB
 							// ajouter code ici pour tableau
+	ind_fin = rep->nb_elts - 1;
+	strcpy_s(tmp_nom, _countof(tmp_nom), nom);    //on copie le nom dans tmp_nom, et on le passe en majuscule avec strupr
+	_strupr_s(tmp_nom, _countof(tmp_nom));
+	while (trouve == false) {  //on va comparer tmp_nom a chaque élément du répertoire 
+		strcpy_s(tmp_nom2, _countof(tmp_nom2), rep->tab[i].nom);   //on copie dans tmp_nom2 le nom du répertoire et on le passe en majuscule pour comparer dans le même format
+		_strupr_s(tmp_nom2, _countof(tmp_nom2));
+		if (strcmp(tmp_nom, tmp_nom2)==0) {				 //on compare
+			trouve = true;								//si ce sont les mêmes trouve devient true 
+		}
+		else if (i == ind_fin) {
+			return -1;  //si on est arrivé à la fin, et qu'on a pas trouvé on return -1
+		}
+		i++; 
+	}
+	return i-1; //on return l'indice du nom trouvé
 	
 #else
 #ifdef IMPL_LIST
@@ -209,9 +229,28 @@ int rechercher_nom(Repertoire *rep, char nom[], int ind)
   /*********************************************************************/
   /* Supprimer tous les caracteres non numériques de la chaines        */
   /*********************************************************************/
+
+void supprime_caractere(char* chaine, int rang) {					//on créé une fonction pour supprimer un caractère d'un chaine pour la fonction compact
+	int j = rang;
+	while (*(chaine + j + 1) != '\0') {
+		*(chaine + j) = *(chaine + j + 1);
+		j++;
+	}
+	chaine--;
+	return;
+}
+
 void compact(char *s)
 {
 	// compléter code ici
+	
+	int k = 0;
+
+	while (*(s + k) != '\0') {
+		if (isdigit(*(s + k)) == 0) {
+			supprime_caractere(&s,k);
+		}
+	}
 
 	return;
 }
