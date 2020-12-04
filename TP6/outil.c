@@ -31,6 +31,7 @@ int ajouter_un_contact_dans_rep(Repertoire *rep, Enregistrement enr)
 	{
 		*(rep->tab + rep->nb_elts) = enr;
 		rep->nb_elts += 1;
+		modif = true;
 	}
 	else {
 		return(ERROR);
@@ -274,7 +275,29 @@ int sauvegarder(Repertoire *rep, char nom_fichier[])
 {
 	FILE *fic_rep;					/* le fichier */
 #ifdef IMPL_TAB
-	// ajouter code ici pour tableau
+	
+	errno_t err = fopen_s(&fic_rep, nom_fichier, "w");
+	if (fic_rep == NULL) return ERROR;
+
+	for (int i = 0; i < rep->nb_elts; i++) {
+
+		int nbDeCar = 4 + strlen(rep->tab[i].nom) + strlen(rep->tab[i].prenom) + strlen(rep->tab[i].tel);  // 4 pour 2*";" et "\n" et "\0"
+		char* buffer = (char*)malloc(nbDeCar * sizeof(char));
+		if (buffer == NULL) {
+			printf("Memoire insuffisante.");
+			return ERROR;
+		}
+		strcpy_s(buffer, nbDeCar, rep->tab[i].nom);
+		strcat_s(buffer, nbDeCar, ";");
+		strcat_s(buffer, nbDeCar, rep->tab[i].prenom);
+		strcat_s(buffer, nbDeCar, ";");
+		strcat_s(buffer, nbDeCar, rep->tab[i].tel);
+		strcat_s(buffer, nbDeCar, "\n");
+		fputs(buffer, fic_rep);
+		free(buffer);
+	}
+	fclose(fic_rep);
+	return OK;
 	
 #else
 #ifdef IMPL_LIST
