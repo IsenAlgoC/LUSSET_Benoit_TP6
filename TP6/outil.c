@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <stdbool.h>
 #include "rep.h"
 
 #define VERSION 3.0
@@ -139,7 +140,7 @@ void affichage_enreg_frmt(Enregistrement enr)
   /* test si dans l'ordre alphabetique, un enregistrement est apres     */
   /* un autre                                                           */
   /**********************************************************************/
-bool est_sup(Enregistrement enr1, Enregistrement enr2)
+bool est_sup(Enregistrement enr1, Enregistrement enr2)					//On vérifie si la première chaine est après ou non dans l'alphabet (true si après)
 {
 	// code à compléter ici
 	for (int i = 0; i < MAX_NOM; i++) {
@@ -162,8 +163,17 @@ void trier(Repertoire *rep)
 {
 
 #ifdef IMPL_TAB
-	// ajouter code ici pour tableau
 	
+	for (int j = 0; j < rep->nb_elts; j++) {
+		for (int i = 0; i < rep->nb_elts; i++) {
+			if (est_sup(*((rep->tab) + i), *((rep->tab) + i + 1)) == true) {
+				Enregistrement tmp;
+				tmp = *((rep->tab) + i);
+				*((rep->tab) + i) = *((rep->tab) + i + 1);
+				*((rep->tab) + i + 1) = tmp;
+			}
+		}
+	}
 
 
 	
