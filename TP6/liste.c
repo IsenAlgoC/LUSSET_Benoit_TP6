@@ -79,12 +79,14 @@ int InsertElementAt(LinkedList *Liste, int i, Enregistrement pers) {
 		if (Liste->size == 0) { // insertion en tête de l'unique élément
 			NewElement = NewLinkedListElement(pers);
 			if (NewElement != NULL) {
-			//
-			//
+			
 			//   insertion code ici
-			//
-			//
-			//
+
+				Liste->head = NewElement;
+				Liste->tail = NewElement;
+				Liste->size += 1;
+				NewElement->next = CurrentElement;
+
 		}
 			else {
 				return(0);
@@ -93,12 +95,10 @@ int InsertElementAt(LinkedList *Liste, int i, Enregistrement pers) {
 		if (Liste->size <= i) { // insertion en queue
 			NewElement = NewLinkedListElement(pers);
 			if (NewElement != NULL) {
-			//
-			//
 			//   insertion code ici
-			//
-			//
-			//
+
+				Liste->tail = NewElement;
+				Liste->size += 1;
 			}
 			else {
 				return(0);
@@ -114,16 +114,56 @@ int InsertElementAt(LinkedList *Liste, int i, Enregistrement pers) {
 // FONCTION A COMPLETER
 int DeleteLinkedListElem(LinkedList * list, SingleLinkedListElem * item) {
 	if (list == NULL) return(0); // La liste n'existe pas
-	if ((list->head == NULL) || (list->tail == NULL)) return(0); // liste vide ou anomalie
-	if ((list->head == list->tail) && (list->size != 1)) return(0); // anomalie
-	if ((list->size == 0) || (item == NULL)) return(0); // pas d'élément dans la liste ou item invalide
+	if ((list->head == NULL) || (list->tail == NULL)) return(0);		// liste vide ou anomalie
+	if ((list->head == list->tail) && (list->size != 1)) return(0);		// anomalie
+	if ((list->size == 0) || (item == NULL)) return(0);					// pas d'élément dans la liste ou item invalide
+	SingleLinkedListElem* tmp = list->head;
+	SingleLinkedListElem* previous = NULL;							//élement préccédent : création d'un pointeur
+	if ((item == list->head) && (item == list->tail)) {				//il n'y a qu'un seul élement il est donc en tête et en queue
+		list->head = NULL;
+		list->tail = NULL;
+		list->size = 0;
+		free(item);
+		return(1);
+	}
 
-	//
-	//
 	// compléter code ici
-	//
-	//
 
+	//La liste ne contient qu'un élément
+	if (list->size == 1) {
+		list->head = NULL;
+		list->tail = NULL;
+		list->size = 0;
+		return EXIT_SUCCESS;
+	}
+	
+	//il est en tête, on supprime la tête
+	if (item = list->head) {
+		list->head = NULL;
+		list->size = 0;
+		free(item);
+		return(1);
+	}
+	while ((tmp != NULL) && (tmp != item)) {
+		previous = tmp;
+		tmp = tmp->next;
+	}
+	//il est en queue, on supprime la queue 
+	if (item = list->tail) {
+
+		list->tail = previous;
+		previous->next = NULL;
+		list->size -= 1;
+		free(item);
+		return (1);
+	}
+	//il est à une position lambda dans la liste chainée 
+	if ((previous != NULL) && (tmp == item) && (tmp->next != NULL)) {
+		previous->next = item->next;
+		list->size--;
+		free(item);
+		return (1);
+	}
 
 	return(0);  // pas trouvé
 }

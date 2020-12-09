@@ -40,26 +40,51 @@ int ajouter_un_contact_dans_rep(Repertoire *rep, Enregistrement enr)
 	
 #else
 #ifdef IMPL_LIST
-
+		
+			// compléter code ici pour Liste
+			
 	bool inserted = false;
-	if (rep->nb_elts == 0) {
-		if (InsertElementAt(rep->liste, rep->liste->size, enr) != 0) {
-			rep->nb_elts += 1;
-			modif = true;
-			rep->est_trie = true;
-			return(OK);
-		}
-
+	SingleLinkedListElem* tmp = rep->liste->head;
+	if (rep->nb_elts == 0) {                                   // regarde si la liste est vide
+		InsertElementAt(rep->liste, rep->liste->size, enr);    // insère le premier élément de liste grâce à la fonction InsertElementAt
+		rep->nb_elts += 1;
+		modif = true;
+		rep->est_trie = true;              //modifie les paramètres pour bien assigner la modification au programme
+		inserted = true;
+		return(OK);
 	}
 	else {
-			//
-			// compléter code ici pour Liste
-			//
-			//
-			//
-
+		for (int i = 0; i < rep->liste->size; i++) {					//parcours l'ensemble de la liste chaînée pour
+			if (est_sup(enr, tmp->pers) == false) {						//comparer si l'enregistrement est plus petit que le maillon avec la fonction est_sup
+				if (InsertElementAt(rep->liste, i, enr) != 0) {			//et s'il se situe avant l'élément suivant dans l'alphabet, place le nom à ce maillon
+					rep->nb_elts += 1;
+					modif = true;
+					rep->est_trie = true;
+					inserted = true;
+					return(OK);
+				}
+				else {
+					return(ERROR);
+				}
+			}
+			else {
+				tmp = tmp->next;									// décale le pointeur de la liste au maillon suivant afin de refaire une comparaison avec est_sup
+			}
+			if (i == rep->liste->size - 1) {
+				if (InsertElementAt(rep->liste, i + 1, enr) != 0) {    //vérifie que l'insertion est possible dans la liste chaînée sinon renvoie une erreur
+					rep->nb_elts += 1;
+					modif = true;
+					rep->est_trie = true;
+					inserted = true;
+					return(OK);
+				}
+				else {
+					return(ERROR);
+				}
+			}
+		}
+		return(ERROR);
 	}
-
 
 #endif
 	
@@ -182,7 +207,7 @@ void trier(Repertoire *rep)
 #ifdef IMPL_LIST
 	// ajouter code ici pour Liste
 	// rien à faire !
-	// la liste est toujours triée
+	// la liste est toujours triée dès ajouter_un_contact_dans_rep
 #endif
 #endif
 
@@ -230,6 +255,17 @@ int rechercher_nom(Repertoire *rep, char nom[], int ind)
 #else
 #ifdef IMPL_LIST
 							// ajouter code ici pour Liste
+
+	SingleLinkedListElem* tmp = rep->liste->head;		// positionne un pointeur sur la tête de la liste chaînée
+	for (i = 0; i < rep->liste->size; i++) {
+		if (_stricmp(nom, tmp->pers.nom) == 0) {		// compare le nom tapé avec le nom du maillon choisi
+			trouve = true;
+			return i - 1;
+			break;										// sort de la boucle si le nom a été trouvé
+		}
+		tmp = tmp->next;								//positionne le pointeur sur le maillon suivant 
+	}
+	return -1;
 	
 #endif
 #endif
@@ -302,6 +338,26 @@ int sauvegarder(Repertoire *rep, char nom_fichier[])
 #else
 #ifdef IMPL_LIST
 	// ajouter code ici pour Liste
+
+	errno_t err = fopen_s(&fic_rep, nom_fichier, "w");
+
+	if ((err = fopen_s(&fic_rep, nom_fichier, "w")) != 0) {
+		return(err);
+	}
+	else {
+		LinkedList* liste = rep->liste;
+		if (fic_rep != 0) {
+			for (size_t i = 0; i < liste->size; i++) {
+				fprintf(fic_rep, "%s%c%s%c%s\n", GetElementAt(liste, i)->pers.nom, SEPARATEUR, GetElementAt(liste, i)->pers.prenom, SEPARATEUR, GetElementAt(liste, i)->pers.tel);
+			}
+			fclose(fic_rep);
+			return OK;
+		}
+		else { return ERROR; }
+	}
+
+
+
 #endif
 #endif
 
@@ -358,6 +414,8 @@ int charger(Repertoire *rep, char nom_fichier[])
 #else
 #ifdef IMPL_LIST
 														// ajouter code implemention liste
+
+
 #endif
 #endif
 
