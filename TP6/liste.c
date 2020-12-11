@@ -4,8 +4,8 @@
 #include <locale.h>
 #include "liste.h"
 
-// #define VERSION 3.0
-// #define SQUELET
+#define VERSION 3.0
+#define SQUELET
 
 
 // crée une nouvelle liste chainée unilataire vide et renvoie un pointeur sur cette liste
@@ -139,8 +139,8 @@ int DeleteLinkedListElem(LinkedList * list, SingleLinkedListElem * item) {
 	
 	//il est en tête, on supprime la tête
 	if (item = list->head) {
-		list->head = NULL;
-		list->size = 0;
+		list->head = item->next;
+		list->size --;
 		free(item);
 		return(1);
 	}

@@ -415,18 +415,20 @@ int charger(Repertoire *rep, char nom_fichier[])
 #ifdef IMPL_LIST
 														// ajouter code implemention liste
 
-				SingleLinkedListElem* temp = rep->liste->head;
-				if (lire_champ_suivant(buffer, &idx, temp->pers.nom, MAX_NOM, SEPARATEUR) == OK)
+				Enregistrement tmp;
+				if (lire_champ_suivant(buffer, &idx, tmp.nom, MAX_NOM, SEPARATEUR) == OK)
 				{
-					idx++;							/* on saute le separateur */
-					if (lire_champ_suivant(buffer, &idx, temp->pers.prenom, MAX_NOM, SEPARATEUR) == OK)
+					idx++;				// on saute le separateur 
+					if (lire_champ_suivant(buffer, &idx, tmp.prenom, MAX_NOM, SEPARATEUR) == OK)
 					{
 						idx++;
-						if (lire_champ_suivant(buffer, &idx, temp->pers.tel, MAX_TEL, SEPARATEUR) == OK)
-							temp = temp->next;	/* element à priori correct, on le comptabilise */
-						/*num_rec++;*/
+						if (lire_champ_suivant(buffer, &idx, tmp.tel, MAX_TEL, SEPARATEUR) == OK) {
+							InsertElementAt(rep->liste,num_rec,tmp);
+						}
+								// element à priori correct, on le comptabilise 
 					}
 				}
+
 #endif
 #endif
 
