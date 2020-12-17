@@ -424,6 +424,7 @@ int charger(Repertoire *rep, char nom_fichier[])
 						idx++;
 						if (lire_champ_suivant(buffer, &idx, tmp.tel, MAX_TEL, SEPARATEUR) == OK) {
 							InsertElementAt(rep->liste,num_rec,tmp);
+							num_rec++;
 						}
 								// element à priori correct, on le comptabilise 
 					}
